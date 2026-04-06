@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Payment Form</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 300px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .pay-now {
+            background: #28a745;
+            color: white;
+        }
+
+        .razorpay {
+            background: #3399cc;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Payment</h2>
+
+    <form method="POST" action="{% url 'pay_amount' %}">
+        {% csrf_token %} 
+        <label>Total Amount (₹)</label><br>
+        {% if not payment %}
+        <input type="number" name="amount" placeholder="Enter amount" required>
+        {% else %}
+        <input type="number" name="amount" value="{{amount}}" placeholder="Enter amount" required>
+
+        {% endif %}
+        <button type="submit" class="pay-now">Pay Now</button>
+
+    </form>
+    {% if payment %}
+    <form action="{% url 'pay_amount' %}" method="post">
+    {% csrf_token %} 
+    <script src="https://checkout.razorpay.com/v1/checkout.js" 
+    data-key="rzp_test_pr99iascS1WRtU" 
+    data-amount="{{ payment.amount }}" 
+    data-currency="{{ payment.currency }}" 
+    data-order_id="{{ payment.id }}" 
+    data-buttontext="Pay with Razorpay" 
+    data-name="Neeraj Ecom" 
+    data-description="Thanku for visiting My Site" 
+    data-image="https://example.com/your_logo.jpg" 
+    data-prefill.name="Neeraj Kumar" 
+    data-prefill.email="Neeraj.Patel@gmail.com" 
+    data-theme.color="#2520adff" >
+    </script>
+    <input type="hidden" custom="Hidden Element" name="hidden"> 
+    </form>
+    {% endif %}
+</div>
+
+</body>
+</html>
