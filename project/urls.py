@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',landing,name='landing'),
     path('pay_amount/',pay_amount,name='pay_amount'),
+    path('payment_status/',payment_status,name='payment_status'),
 ]
